@@ -162,9 +162,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/transactions", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const transactionData = insertTransactionLogSchema.parse({
         ...req.body,
-        userId: req.user.id
+        userId: userId
       });
 
       // Get item to check category
@@ -206,6 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const transaction = await storage.createTransaction(transactionData);
       res.status(201).json(transaction);
     } catch (error) {
+      console.error("Transaction creation error:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });
