@@ -1,0 +1,212 @@
+
+Nama Aplikasi: SCI-Ventory Pro
+
+Tujuan Utama
+
+Membangun aplikasi web full-stack modern untuk manajemen inventaris gudang sebuah perusahaan jasa kebersihan. Pengguna utama adalah Admin gudang. Aplikasi harus mampu melacak barang habis pakai (consumables) dan aset mesin individual, mencatat semua permintaan barang keluar, dan menyediakan laporan interaktif yang dapat diekspor.
+
+Filosofi Inti & Desain
+
+UI/UX Modern (2025): Antarmuka harus bersih, minimalis, dan intuitif dengan pengalaman pengguna yang responsif di semua perangkat. Gunakan component library modern seperti Shadcn/ui di atas Tailwind CSS untuk estetika yang tajam dan konsisten.
+
+Visualisasi Data Interaktif: Dasbor utama adalah pusat informasi. Data tidak hanya ditampilkan dalam tabel, tetapi juga melalui grafik interaktif untuk memberikan insight cepat. Gunakan library seperti Recharts atau Chart.js.
+
+Kinerja & Responsivitas: Aplikasi harus cepat. Optimalkan API call dan manfaatkan client-side state management secara efisien, misalnya dengan Zustand atau TanStack Query (React Query).
+
+Tech Stack yang Diusulkan
+
+Frontend: React (Vite), TypeScript, Tailwind CSS, Shadcn/ui (Component Library), Recharts (Charts), React Hook Form (Manajemen Form), Zustand (State Management).
+
+Backend: Node.js, Express.js, Prisma (ORM), PostgreSQL (Database).
+
+Autentikasi: JSON Web Tokens (JWT).
+
+Lainnya: SheetJS (xlsx) untuk ekspor Excel, jsPDF & jspdf-autotable untuk ekspor PDF.
+
+1. Autentikasi
+
+Buat sistem autentikasi berbasis JWT yang aman.
+
+Model Pengguna (User):
+
+id: UUID (Primary Key)
+
+email: String, unik.
+
+password: String (harus di-hash menggunakan bcrypt).
+
+role: Enum (ADMIN, USER), default ADMIN.
+
+createdAt: DateTime.
+
+updatedAt: DateTime.
+
+Alur Login:
+
+Halaman Login (/login) dengan kolom email dan password.
+
+Saat submit, request dikirim ke API backend.
+
+Backend memvalidasi kredensial dan, jika berhasil, menghasilkan JWT yang dikirim kembali ke client.
+
+Client menyimpan JWT (misalnya dalam httpOnly cookie) dan mengarahkan pengguna ke Dasbor.
+
+Semua halaman aplikasi (selain Login) harus dilindungi. Akses tanpa JWT yang valid akan dialihkan kembali ke halaman Login.
+
+2. Skema Database (Data Models)
+
+Gunakan Prisma untuk mendefinisikan model berikut.
+
+a. Barang (Item)
+
+id: UUID.
+
+kodeBarang: String, unik.
+
+namaBarang: String.
+
+kategori: Enum (KIMIA, PERALATAN, MESIN).
+
+stok: Integer (hanya relevan untuk KIMIA & PERALATAN).
+
+satuan: String (contoh: "Liter", "Pcs", "Botol").
+
+batasMinimumStok: Integer (untuk notifikasi stok kritis).
+
+createdAt: DateTime.
+
+updatedAt: DateTime.
+
+Relasi: Memiliki banyak Aset dan LogTransaksi.
+
+b. Aset (Asset)
+
+id: UUID.
+
+nomorSeri: String, unik.
+
+status: Enum (TERSEDIA, DIPINJAM, PERBAIKAN), default TERSEDIA.
+
+barangId: UUID (Foreign Key ke model Barang).
+
+createdAt: DateTime.
+
+updatedAt: DateTime.
+
+Relasi: Milik satu Barang (relation(fields: [barangId], references: [id])).
+
+c. LogTransaksi (TransactionLog)
+
+id: UUID.
+
+tanggalPermintaan: DateTime, default now().
+
+namaPeminta: String.
+
+areaKebutuhan: String.
+
+jumlah: Integer (opsional, untuk barang habis pakai).
+
+tipe: Enum (KELUAR, MASUK).
+
+barangId: UUID (Foreign Key ke Barang).
+
+asetId: UUID (Foreign Key opsional ke Aset).
+
+userId: UUID (Foreign Key ke User yang membuat log).
+
+createdAt: DateTime.
+
+updatedAt: DateTime.
+
+Relasi: Milik satu Barang, satu User, dan opsional satu Aset.
+
+3. Halaman & Fungsionalitas
+
+a. Dasbor Utama (/)
+
+Ini adalah halaman pertama setelah login, dirancang untuk memberikan gambaran cepat.
+
+Layout: Gunakan sidebar navigasi di kiri dan area konten utama di kanan.
+
+Komponen 1: Kartu Statistik (Stat Cards)
+
+Tampilkan angka-angka kunci dengan ikon yang relevan: Total Jenis Barang, Total Aset Dipinjam, Jumlah Stok Kritis, dan Total Transaksi Bulan Ini.
+
+Komponen 2: Grafik Tren Penggunaan Barang (Chart)
+
+Sebuah Line Chart yang menampilkan total barang keluar (LogTransaksi tipe KELUAR) per hari selama 30 hari terakhir.
+
+Komponen 3: Komposisi Inventaris (Chart)
+
+Sebuah Donut Chart yang menunjukkan persentase jumlah barang berdasarkan kategori (Kimia, Peralatan, Mesin).
+
+Komponen 4: Tabel Stok Kritis
+
+Tabel ringkas yang menampilkan barang dengan stok <= batasMinimumStok. Kolom: Nama Barang, Stok Saat Ini, Batas Minimum.
+
+Komponen 5: Tabel Aktivitas Terakhir
+
+Tabel yang menampilkan 5 LogTransaksi terbaru. Kolom: Nama Barang, Peminta, Tipe, Tanggal.
+
+b. Manajemen Inventaris (/inventory/items)
+
+Halaman CRUD lengkap untuk model Barang.
+
+Gunakan Data Table Component dari Shadcn/ui yang memiliki fitur pencarian global, filter per kolom, sorting, dan paginasi.
+
+Tombol "Tambah Barang Baru" akan membuka sebuah Modal atau Sheet (panel geser dari samping) berisi form, bukan halaman baru.
+
+Setiap baris tabel memiliki tombol dropdown "Aksi" dengan pilihan "Edit" (membuka modal yang sama dengan data terisi) dan "Hapus" (dengan dialog konfirmasi).
+
+c. Manajemen Aset (/inventory/assets)
+
+Halaman CRUD lengkap untuk model Aset.
+
+Gunakan Data Table Component yang sama dengan fitur lengkap.
+
+Tabel menampilkan nomorSeri, namaBarang (dari relasi), status (dengan badge berwarna), dan tanggal akuisisi.
+
+Form "Tambah Aset" (dalam modal) harus memiliki dropdown untuk memilih Barang yang kategorinya hanya MESIN.
+
+d. Buat Transaksi Baru (/transactions/new)
+
+Formulir cerdas untuk mencatat barang keluar.
+
+Gunakan React Hook Form untuk validasi real-time.
+
+Form Fields: Nama Peminta, Area Kebutuhan, dan Pilih Barang (dropdown yang dapat dicari).
+
+Logika Kondisional Dinamis:
+
+Jika Barang yang dipilih memiliki kategori KIMIA atau PERALATAN, tampilkan input Jumlah dan validasi agar tidak melebihi stok yang ada.
+
+Jika Barang yang dipilih adalah MESIN, sembunyikan input Jumlah. Sebagai gantinya, tampilkan dropdown kedua "Pilih Nomor Seri Aset" yang hanya berisi Aset dengan status TERSEDIA dari barang tersebut.
+
+Saat Submit:
+
+Kirim data ke API untuk membuat LogTransaksi.
+
+API akan melakukan update atomik: mengurangi stok pada Barang ATAU mengubah status pada Aset menjadi DIPINJAM.
+
+Tampilkan notifikasi toast (misal "Transaksi berhasil dicatat") setelah berhasil.
+
+e. Laporan Transaksi (/reports/transactions)
+
+Halaman untuk analisis dan ekspor data transaksi.
+
+Kontrol Filter: Di bagian atas, sediakan filter canggih:
+
+Date Range Picker untuk tanggalPermintaan.
+
+Dropdown multi-select untuk memfilter berdasarkan satu atau lebih Barang.
+
+Kotak pencarian teks untuk namaPeminta atau areaKebutuhan.
+
+Tabel Data: Tampilkan data LogTransaksi yang sudah difilter dalam Data Table Component yang detail.
+
+Tombol Ekspor:
+
+"Export to Excel": Mengunduh file .xlsx dari data yang sedang ditampilkan (sudah difilter).
+
+"Export to PDF": Menghasilkan dokumen PDF yang rapi dari data yang sedang ditampilkan, lengkap dengan header dan footer.
