@@ -19,7 +19,7 @@ export default function Dashboard() {
   if (statsLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-lg">Loading dashboard...</div>
+        <div className="text-lg">Memuat dasbor...</div>
       </div>
     );
   }
@@ -30,12 +30,12 @@ export default function Dashboard() {
       <header className="bg-white border-b border-slate-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-            <p className="text-slate-600">Welcome back! Here's what's happening in your warehouse.</p>
+            <h1 className="text-2xl font-bold text-slate-900">Dasbor</h1>
+            <p className="text-slate-600">Selamat datang kembali! Berikut yang terjadi di gudang Anda.</p>
           </div>
           <div className="flex items-center space-x-4">
             <div className="text-sm text-slate-500">
-              {new Date().toLocaleDateString('en-US', { 
+              {new Date().toLocaleDateString('id-ID', { 
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -51,28 +51,28 @@ export default function Dashboard() {
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
-            title="Total Items"
+            title="Total Barang"
             value={stats?.totalItems || 0}
             icon={Package}
             change="+12%"
             changeType="positive"
           />
           <StatCard
-            title="Assets On Loan"
+            title="Aset Dipinjam"
             value={stats?.assetsOnLoan || 0}
             icon={Archive}
             change="+8%"
             changeType="negative"
           />
           <StatCard
-            title="Critical Stock"
+            title="Stok Kritis"
             value={stats?.criticalStock || 0}
             icon={AlertTriangle}
             change="+2"
             changeType="negative"
           />
           <StatCard
-            title="Monthly Transactions"
+            title="Transaksi Bulanan"
             value={stats?.monthlyTransactions || 0}
             icon={TrendingUp}
             change="+18%"

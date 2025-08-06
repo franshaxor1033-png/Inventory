@@ -67,8 +67,8 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
       queryClient.invalidateQueries({ queryKey: ["/api/items"] });
       queryClient.invalidateQueries({ queryKey: ["/api/assets"] });
       toast({
-        title: "Transaction created",
-        description: "The transaction has been successfully recorded.",
+        title: "Transaksi dibuat",
+        description: "Transaksi berhasil dicatat.",
       });
       form.reset();
       setSelectedItem(null);
@@ -76,8 +76,8 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
     },
     onError: (error: any) => {
       toast({
-        title: "Transaction failed",
-        description: error.message || "Failed to create the transaction. Please try again.",
+        title: "Transaksi gagal",
+        description: error.message || "Gagal membuat transaksi. Silakan coba lagi.",
         variant: "destructive",
       });
     },
@@ -101,9 +101,9 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               name="namaPeminta"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Requester Name</FormLabel>
+                  <FormLabel>Nama Peminta</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., John Doe" {...field} />
+                    <Input placeholder="contoh: Budi Santoso" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,9 +115,9 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               name="areaKebutuhan"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Area of Need</FormLabel>
+                  <FormLabel>Area Kebutuhan</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Floor 2 Office" {...field} />
+                    <Input placeholder="contoh: Kantor Lantai 2" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -131,16 +131,16 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               name="tipe"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Transaction Type</FormLabel>
+                  <FormLabel>Tipe Transaksi</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder="Pilih tipe" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="KELUAR">Out (Request)</SelectItem>
-                      <SelectItem value="MASUK">In (Return)</SelectItem>
+                      <SelectItem value="KELUAR">Keluar (Permintaan)</SelectItem>
+                      <SelectItem value="MASUK">Masuk (Pengembalian)</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -153,11 +153,11 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               name="barangId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Item</FormLabel>
+                  <FormLabel>Barang</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select an item" />
+                        <SelectValue placeholder="Pilih barang" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -165,7 +165,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
                         <SelectItem key={item.id} value={item.id}>
                           {item.namaBarang} ({item.kodeBarang})
                           {(item.kategori === "KIMIA" || item.kategori === "PERALATAN") && 
-                            ` - Stock: ${item.stok} ${item.satuan}`
+                            ` - Stok: ${item.stok} ${item.satuan}`
                           }
                         </SelectItem>
                       ))}
@@ -185,10 +185,10 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Quantity 
+                    Jumlah 
                     {selectedItem && (
                       <span className="text-sm text-slate-500 ml-2">
-                        (Available: {selectedItem.stok} {selectedItem.satuan})
+                        (Tersedia: {selectedItem.stok} {selectedItem.satuan})
                       </span>
                     )}
                   </FormLabel>
@@ -197,7 +197,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
                       type="number" 
                       min="1" 
                       max={selectedItem?.stok || undefined}
-                      placeholder="Enter quantity" 
+                      placeholder="Masukkan jumlah" 
                       value={field.value?.toString() || ""}
                       onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                     />
@@ -214,11 +214,11 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               name="asetId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Asset (Serial Number)</FormLabel>
+                  <FormLabel>Aset (Nomor Seri)</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value || ""}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select an available asset" />
+                        <SelectValue placeholder="Pilih aset yang tersedia" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -251,7 +251,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "Recording..." : "Record Transaction"}
+              {isLoading ? "Mencatat..." : "Catat Transaksi"}
             </Button>
           </div>
         </form>

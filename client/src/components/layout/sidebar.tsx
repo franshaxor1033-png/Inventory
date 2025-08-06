@@ -20,7 +20,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    title: "Dashboard",
+    title: "Dasbor",
     href: "/",
     icon: LayoutDashboard,
   },
@@ -28,12 +28,12 @@ const navItems: NavItem[] = [
 
 const inventoryItems: NavItem[] = [
   {
-    title: "Items",
+    title: "Barang",
     href: "/inventory/items",
     icon: Box,
   },
   {
-    title: "Assets",
+    title: "Aset",
     href: "/inventory/assets",
     icon: Cpu,
   },
@@ -41,12 +41,12 @@ const inventoryItems: NavItem[] = [
 
 const transactionItems: NavItem[] = [
   {
-    title: "New Transaction",
+    title: "Transaksi Baru",
     href: "/transactions/new",
     icon: Plus,
   },
   {
-    title: "Reports",
+    title: "Laporan",
     href: "/reports/transactions",
     icon: BarChart3,
   },
@@ -66,7 +66,7 @@ export default function Sidebar() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">SCI-Ventory Pro</h1>
-            <p className="text-sm text-slate-500">Inventory Management</p>
+            <p className="text-sm text-slate-500">Manajemen Inventaris</p>
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function Sidebar() {
         {/* Inventory Section */}
         <div className="pt-4">
           <h3 className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            Inventory
+            Inventaris
           </h3>
           {inventoryItems.map((item) => {
             const Icon = item.icon;
@@ -125,7 +125,7 @@ export default function Sidebar() {
         {/* Transactions Section */}
         <div className="pt-4">
           <h3 className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            Transactions
+            Transaksi
           </h3>
           {transactionItems.map((item) => {
             const Icon = item.icon;

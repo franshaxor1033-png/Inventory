@@ -29,16 +29,16 @@ export default function Items() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/items"] });
       toast({
-        title: "Item deleted",
-        description: "The item has been successfully deleted.",
+        title: "Barang dihapus",
+        description: "Barang berhasil dihapus.",
       });
       setIsDeleteDialogOpen(false);
       setSelectedItem(null);
     },
     onError: () => {
       toast({
-        title: "Delete failed",
-        description: "Failed to delete the item. Please try again.",
+        title: "Hapus gagal",
+        description: "Gagal menghapus barang. Silakan coba lagi.",
         variant: "destructive",
       });
     },
@@ -47,17 +47,17 @@ export default function Items() {
   const columns = [
     {
       key: "kodeBarang" as keyof Item,
-      header: "Code",
+      header: "Kode",
       sortable: true,
     },
     {
       key: "namaBarang" as keyof Item,
-      header: "Name",
+      header: "Nama",
       sortable: true,
     },
     {
       key: "kategori" as keyof Item,
-      header: "Category",
+      header: "Kategori",
       render: (value: string) => (
         <Badge 
           variant="outline"
@@ -74,7 +74,7 @@ export default function Items() {
     },
     {
       key: "stok" as keyof Item,
-      header: "Stock",
+      header: "Stok",
       render: (value: number, row: Item) => (
         <span className={value <= row.batasMinimumStok ? "text-red-600 font-medium" : ""}>
           {value} {row.satuan}
@@ -84,7 +84,7 @@ export default function Items() {
     },
     {
       key: "batasMinimumStok" as keyof Item,
-      header: "Min. Stock",
+      header: "Stok Min.",
       render: (value: number, row: Item) => `${value} ${row.satuan}`,
       sortable: true,
     },
@@ -112,20 +112,20 @@ export default function Items() {
       <header className="bg-white border-b border-slate-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Items</h1>
-            <p className="text-slate-600">Manage your inventory items and stock levels</p>
+            <h1 className="text-2xl font-bold text-slate-900">Barang</h1>
+            <p className="text-slate-600">Kelola barang inventaris dan level stok Anda</p>
           </div>
           
           <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
             <SheetTrigger asChild>
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
-                Add Item
+                Tambah Barang
               </Button>
             </SheetTrigger>
             <SheetContent className="w-[600px] sm:max-w-[600px]">
               <SheetHeader>
-                <SheetTitle>Add New Item</SheetTitle>
+                <SheetTitle>Tambah Barang Baru</SheetTitle>
               </SheetHeader>
               <ItemForm onSuccess={handleFormSuccess} />
             </SheetContent>
@@ -148,7 +148,7 @@ export default function Items() {
       <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
         <SheetContent className="w-[600px] sm:max-w-[600px]">
           <SheetHeader>
-            <SheetTitle>Edit Item</SheetTitle>
+            <SheetTitle>Edit Barang</SheetTitle>
           </SheetHeader>
           {selectedItem && (
             <ItemForm 
@@ -163,19 +163,19 @@ export default function Items() {
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the item
-              "{selectedItem?.namaBarang}" and remove it from the database.
+              Tindakan ini tidak dapat dibatalkan. Ini akan menghapus permanen barang
+              "{selectedItem?.namaBarang}" dan menghapusnya dari database.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => selectedItem && deleteMutation.mutate(selectedItem.id)}
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? "Menghapus..." : "Hapus"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

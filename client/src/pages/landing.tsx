@@ -12,14 +12,14 @@ export default function Landing() {
             SCI-Ventory Pro
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            Comprehensive warehouse inventory management for cleaning service companies
+            Manajemen inventaris gudang komprehensif untuk perusahaan jasa kebersihan
           </p>
           <Button 
             size="lg" 
             className="text-lg px-8 py-3"
             onClick={() => window.location.href = "/api/login"}
           >
-            Sign In to Get Started
+            Masuk untuk Memulai
           </Button>
         </div>
 
@@ -28,11 +28,11 @@ export default function Landing() {
           <Card className="text-center">
             <CardHeader>
               <Package className="h-12 w-12 mx-auto text-blue-600 mb-4" />
-              <CardTitle>Inventory Management</CardTitle>
+              <CardTitle>Manajemen Inventaris</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Track consumables, equipment, and machines with smart categorization and stock alerts
+                Lacak barang habis pakai, peralatan, dan mesin dengan kategorisasi cerdas dan peringatan stok
               </CardDescription>
             </CardContent>
           </Card>
@@ -40,11 +40,11 @@ export default function Landing() {
           <Card className="text-center">
             <CardHeader>
               <BarChart3 className="h-12 w-12 mx-auto text-green-600 mb-4" />
-              <CardTitle>Advanced Analytics</CardTitle>
+              <CardTitle>Analitik Lanjutan</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Real-time dashboards with usage trends, inventory composition, and critical stock monitoring
+                Dashboard real-time dengan tren penggunaan, komposisi inventaris, dan pemantauan stok kritis
               </CardDescription>
             </CardContent>
           </Card>
@@ -52,11 +52,11 @@ export default function Landing() {
           <Card className="text-center">
             <CardHeader>
               <Users className="h-12 w-12 mx-auto text-purple-600 mb-4" />
-              <CardTitle>Transaction Tracking</CardTitle>
+              <CardTitle>Pelacakan Transaksi</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Complete audit trail of all inventory movements with requester information and area assignment
+                Jejak audit lengkap dari semua pergerakan inventaris dengan informasi peminta dan penugasan area
               </CardDescription>
             </CardContent>
           </Card>
@@ -64,11 +64,11 @@ export default function Landing() {
           <Card className="text-center">
             <CardHeader>
               <Shield className="h-12 w-12 mx-auto text-red-600 mb-4" />
-              <CardTitle>Secure Access</CardTitle>
+              <CardTitle>Akses Aman</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Role-based access control with secure authentication for admin users and staff
+                Kontrol akses berbasis peran dengan autentikasi aman untuk pengguna admin dan staf
               </CardDescription>
             </CardContent>
           </Card>
@@ -77,7 +77,7 @@ export default function Landing() {
         {/* Categories Section */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-16">
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-            Specialized for Cleaning Services
+            Khusus untuk Layanan Kebersihan
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
@@ -86,7 +86,7 @@ export default function Landing() {
               </div>
               <h3 className="text-xl font-semibold mb-2">KIMIA (Chemicals)</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Track cleaning chemicals with automatic stock deduction and minimum threshold alerts
+                Lacak bahan kimia pembersih dengan pengurangan stok otomatis dan peringatan batas minimum
               </p>
             </div>
             <div className="text-center">
@@ -95,7 +95,7 @@ export default function Landing() {
               </div>
               <h3 className="text-xl font-semibold mb-2">PERALATAN (Equipment)</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Manage consumable equipment and supplies with intelligent inventory tracking
+                Kelola peralatan dan perlengkapan habis pakai dengan pelacakan inventaris yang cerdas
               </p>
             </div>
             <div className="text-center">
@@ -104,7 +104,7 @@ export default function Landing() {
               </div>
               <h3 className="text-xl font-semibold mb-2">MESIN (Machines)</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Track individual machine assets with status monitoring and assignment tracking
+                Lacak aset mesin individual dengan pemantauan status dan pelacakan penugasan
               </p>
             </div>
           </div>
@@ -113,17 +113,17 @@ export default function Landing() {
         {/* Call to Action */}
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-            Ready to streamline your inventory management?
+            Siap untuk merampingkan manajemen inventaris Anda?
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-            Start managing your warehouse inventory with professional-grade tools designed for cleaning services
+            Mulai kelola inventaris gudang Anda dengan alat tingkat profesional yang dirancang khusus untuk layanan kebersihan
           </p>
           <Button 
             size="lg" 
             className="text-lg px-8 py-3"
             onClick={() => window.location.href = "/api/login"}
           >
-            Access SCI-Ventory Pro
+            Akses SCI-Ventory Pro
           </Button>
         </div>
       </div>

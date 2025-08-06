@@ -32,16 +32,16 @@ export default function Assets() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assets"] });
       toast({
-        title: "Asset deleted",
-        description: "The asset has been successfully deleted.",
+        title: "Aset dihapus",
+        description: "Aset berhasil dihapus.",
       });
       setIsDeleteDialogOpen(false);
       setSelectedAsset(null);
     },
     onError: () => {
       toast({
-        title: "Delete failed",
-        description: "Failed to delete the asset. Please try again.",
+        title: "Hapus gagal",
+        description: "Gagal menghapus aset. Silakan coba lagi.",
         variant: "destructive",
       });
     },
@@ -50,12 +50,12 @@ export default function Assets() {
   const columns = [
     {
       key: "nomorSeri" as keyof AssetWithItem,
-      header: "Serial Number",
+      header: "Nomor Seri",
       sortable: true,
     },
     {
       key: "item" as keyof AssetWithItem,
-      header: "Item",
+      header: "Barang",
       render: (value: any) => (
         <div>
           <div className="font-medium">{value.namaBarang}</div>
@@ -76,15 +76,15 @@ export default function Assets() {
             "bg-red-50 text-red-700"
           }
         >
-          {value === "TERSEDIA" ? "Available" : value === "DIPINJAM" ? "On Loan" : "Under Repair"}
+          {value === "TERSEDIA" ? "Tersedia" : value === "DIPINJAM" ? "Dipinjam" : "Dalam Perbaikan"}
         </Badge>
       ),
       sortable: true,
     },
     {
       key: "createdAt" as keyof AssetWithItem,
-      header: "Added Date",
-      render: (value: string) => format(new Date(value), "MMM dd, yyyy"),
+      header: "Tanggal Ditambah",
+      render: (value: string) => format(new Date(value), "dd MMM yyyy"),
       sortable: true,
     },
   ];
@@ -111,15 +111,15 @@ export default function Assets() {
       <header className="bg-white border-b border-slate-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Assets</h1>
-            <p className="text-slate-600">Manage your machine assets and their status</p>
+            <h1 className="text-2xl font-bold text-slate-900">Aset</h1>
+            <p className="text-slate-600">Kelola aset mesin Anda dan statusnya</p>
           </div>
           
           <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
             <SheetTrigger asChild>
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
-                Add Asset
+                Tambah Aset
               </Button>
             </SheetTrigger>
             <SheetContent className="w-[600px] sm:max-w-[600px]">
