@@ -54,7 +54,7 @@ const transactionItems: NavItem[] = [
 
 export default function Sidebar() {
   const [location] = useLocation();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <aside className="w-72 bg-white border-r border-slate-200 flex flex-col">
@@ -153,19 +153,27 @@ export default function Sidebar() {
       {/* User Profile */}
       <div className="p-4 border-t border-slate-200">
         <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-50">
-          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-primary-foreground" />
-          </div>
+          {user?.profileImageUrl ? (
+            <img 
+              src={user.profileImageUrl} 
+              alt="Profile" 
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-primary-foreground" />
+            </div>
+          )}
           <div className="flex-1">
             <p className="text-sm font-medium text-slate-900">
-              {user?.email || "Unknown User"}
+              {user?.email || user?.firstName || "User"}
             </p>
             <p className="text-xs text-slate-500">
-              {user?.role || "ADMIN"}
+              Admin
             </p>
           </div>
           <button
-            onClick={logout}
+            onClick={() => window.location.href = "/api/logout"}
             className="text-slate-400 hover:text-slate-600 transition-colors"
             title="Logout"
           >
