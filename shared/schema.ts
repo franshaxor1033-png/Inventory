@@ -18,6 +18,7 @@ export const roleEnum = pgEnum("role", ["ADMIN", "USER"]);
 export const kategoriEnum = pgEnum("kategori", ["KIMIA", "PERALATAN", "MESIN"]);
 export const statusAssetEnum = pgEnum("status_asset", ["TERSEDIA", "DIPINJAM", "PERBAIKAN"]);
 export const tipeTransaksiEnum = pgEnum("tipe_transaksi", ["KELUAR", "MASUK"]);
+export const themeEnum = pgEnum("theme", ["LIGHT", "DARK"]);
 
 // Session storage table for Replit Auth
 export const sessions = pgTable(
@@ -30,13 +31,30 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table for Replit Auth
+// User storage table for traditional auth
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  username: varchar("username").unique().notNull(),
   email: varchar("email").unique(),
+  password: varchar("password").notNull(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  role: roleEnum("role").notNull().default("USER"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Site settings table
+export const siteSettings = pgTable("site_settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  siteName: varchar("site_name").notNull().default("SCI-Ventory Pro"),
+  logoUrl: varchar("logo_url"),
+  description: text("description").default("Manajemen inventaris gudang komprehensif untuk perusahaan jasa kebersihan"),
+  theme: themeEnum("theme").notNull().default("LIGHT"),
+  primaryColor: varchar("primary_color").default("#3b82f6"),
+  secondaryColor: varchar("secondary_color").default("#64748b"),
+  accentColor: varchar("accent_color").default("#10b981"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -123,6 +141,12 @@ export const insertTransactionLogSchema = createInsertSchema(transactionLogs).om
   tanggalPermintaan: z.coerce.date().optional(),
 });
 
+export const insertSiteSettingsSchema = createInsertSchema(siteSettings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -133,3 +157,5 @@ export type Asset = typeof assets.$inferSelect;
 export type InsertAsset = z.infer<typeof insertAssetSchema>;
 export type TransactionLog = typeof transactionLogs.$inferSelect;
 export type InsertTransactionLog = z.infer<typeof insertTransactionLogSchema>;
+export type SiteSettings = typeof siteSettings.$inferSelect;
+export type InsertSiteSettings = z.infer<typeof insertSiteSettingsSchema>;

@@ -1,24 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertItemSchema, insertAssetSchema, insertTransactionLogSchema } from "@shared/schema";
+import { setupAuth, isAuthenticated, isAdmin } from "./auth";
+import { insertItemSchema, insertAssetSchema, insertTransactionLogSchema, insertSiteSettingsSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
-  await setupAuth(app);
-
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  setupAuth(app);
 
   // Items routes
   app.get("/api/items", isAuthenticated, async (req, res) => {
@@ -162,7 +150,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/transactions", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const transactionData = insertTransactionLogSchema.parse({
         ...req.body,
         userId: userId
@@ -236,6 +224,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const data = await storage.getInventoryComposition();
       res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin settings routes
+  app.get("/api/admin/settings", isAdmin, async (req, res) => {
+    try {
+      const settings = await storage.getSiteSettings();
+      res.json(settings);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.put("/api/admin/settings", isAdmin, async (req, res) => {
+    try {
+      const settingsData = insertSiteSettingsSchema.parse(req.body);
+      const settings = await storage.updateSiteSettings(settingsData);
+      res.json(settings);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }

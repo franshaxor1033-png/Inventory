@@ -1,17 +1,21 @@
 import { 
-  users, items, assets, transactionLogs,
+  users, items, assets, transactionLogs, siteSettings,
   type User, type InsertUser, type UpsertUser,
   type Item, type InsertItem,
   type Asset, type InsertAsset,
-  type TransactionLog, type InsertTransactionLog
+  type TransactionLog, type InsertTransactionLog,
+  type SiteSettings, type InsertSiteSettings
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, lte, desc, and, or, like, gte } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 
 export interface IStorage {
-  // User methods (mandatory for Replit Auth)
+  // User methods (traditional auth)
   getUser(id: string): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUser(id: string, user: Partial<InsertUser>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
 
   // Item methods
@@ -48,12 +52,35 @@ export interface IStorage {
   
   getUsageTrendData(days: number): Promise<Array<{ date: string; count: number }>>;
   getInventoryComposition(): Promise<Array<{ category: string; count: number }>>;
+
+  // Site settings
+  getSiteSettings(): Promise<SiteSettings>;
+  updateSiteSettings(settings: InsertSiteSettings): Promise<SiteSettings>;
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations (mandatory for Replit Auth)
+  // User operations (traditional auth)
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(userData: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(userData).returning();
+    return user;
+  }
+
+  async updateUser(id: string, userData: Partial<InsertUser>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...userData, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
     return user;
   }
 
@@ -301,6 +328,31 @@ export class DatabaseStorage implements IStorage {
       .groupBy(items.kategori);
 
     return result.map(row => ({ category: row.category, count: row.count }));
+  }
+
+  // Site settings methods
+  async getSiteSettings(): Promise<SiteSettings> {
+    const [settings] = await db.select().from(siteSettings).limit(1);
+    
+    if (!settings) {
+      // Create default settings if none exist
+      const [defaultSettings] = await db.insert(siteSettings).values({}).returning();
+      return defaultSettings;
+    }
+    
+    return settings;
+  }
+
+  async updateSiteSettings(settingsData: InsertSiteSettings): Promise<SiteSettings> {
+    const existingSettings = await this.getSiteSettings();
+    
+    const [updatedSettings] = await db
+      .update(siteSettings)
+      .set({ ...settingsData, updatedAt: new Date() })
+      .where(eq(siteSettings.id, existingSettings.id))
+      .returning();
+    
+    return updatedSettings;
   }
 }
 
