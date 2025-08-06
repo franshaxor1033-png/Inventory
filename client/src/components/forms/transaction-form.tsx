@@ -198,7 +198,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
                       min="1" 
                       max={selectedItem?.stok || undefined}
                       placeholder="Enter quantity" 
-                      {...field} 
+                      value={field.value?.toString() || ""}
                       onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                     />
                   </FormControl>

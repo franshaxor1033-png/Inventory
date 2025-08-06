@@ -119,6 +119,8 @@ export const insertTransactionLogSchema = createInsertSchema(transactionLogs).om
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  tanggalPermintaan: z.coerce.date().optional(),
 });
 
 // Types
